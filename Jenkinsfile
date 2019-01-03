@@ -12,5 +12,11 @@ pipeline {
                 }
             }
         }
+        //Deploy to Staging step after .war file has been created
+        stage ("Deploy to Staging"){
+            steps {
+                build job: 'deploy-to-staging'
+            }
+        }
     }
 }
