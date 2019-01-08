@@ -27,6 +27,7 @@ pipeline {
             steps{
                 //This means that this step will fail if nobody approves it within 5 days
                 timeout(time:5, unit:'DAYS'){
+                    //This message  will display for the user in Jenkins
                     input message:'Approve PRODUCTION Deployment?'//, Submitter: xxx (if allowing specific persom to approve this )
                 }
 
