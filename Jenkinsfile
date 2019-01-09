@@ -1,11 +1,22 @@
 pipeline {
-
     agent any
+
+    //Public IP addresses set up for my 2 EC2 Instances (VMs) set up in AWS
+    //Best Practice:  Use "parameters" instead of hard coding IP values within scripts (similar to abstracting test cases)
+    parameters {
+         string(name: 'tomcat_dev', defaultValue: '100.24.66.165', description: 'Staging Server')
+         string(name: 'tomcat_prod', defaultValue: '54.144.41.225', description: 'Production Server')
+    }
+
+    //Trigger set for build to run at a specific time (CRON Syntax)
+    triggers {
+         pollSCM('* * * * *')
+     }
 
     stages{
         stage('Build'){
             steps {
-                bat 'mvn clean package'
+                sh 'mvn clean package'
             }
             post {
                 success {
@@ -15,34 +26,23 @@ pipeline {
             }
         }
 
-        //Deploy to Staging step after .war file has been created
-        stage ("Deploy to Staging"){
-            steps {
-                build job: 'deploy-to-staging'
-            }
-        }
-
-        //Deploy to Production 
-        stage ('Deploy to Production'){
-            steps{
-                //This means that this step will fail if nobody approves it within 5 days
-                timeout(time:5, unit:'DAYS'){
-                    //This message  will display for the user in Jenkins
-                    input message:'Approve PRODUCTION Deployment?'//, Submitter: xxx (if allowing specific persom to approve this )
+        stage ('Deployments'){
+            //"Parallel" tells Jenkins to run both the stages below at he same time.  Another example:  Build code and run Checkstyle at the same time
+            parallel{
+                stage ('Deploy to Staging'){
+                    steps {
+                        //TODO:  Update path to where .pem file is saved
+                        //TODO:  If you are running Jenkins on a Windows machign and are not using tools sucha as Cmder, you will have to change "sh" to "bat" in this script
+                        sh "scp -i C:\Users\ssingh\tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat7/webapps"
+                    }
                 }
 
-                build job: 'Deploy-to-Prod'
-            }
-
-            //If nobody approves within time allotted above, it will fail and display failure message.
-            //If deployment is successful, it will dispaly success message
-            post {
-                success {
-                    echo 'Code deployed to Production.'
-                }
-
-                failure {
-                    echo ' Deployment failed.'
+                stage ("Deploy to Production"){
+                    steps {
+                        //TODO:  Update path to where .pem file is saved
+                        //TODO:  If you are running Jenkins on a Windows machign and are not using tools sucha as Cmder, you will have to change "sh" to "bat" in this script
+                        sh "scp -i C:\Users\ssingh\tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat7/webapps"
+                    }
                 }
             }
         }
