@@ -4,7 +4,7 @@ pipeline {
     //Public IP addresses set up for my 2 EC2 Instances (VMs) set up in AWS
     //Best Practice:  Use "parameters" instead of hard coding IP values within scripts (similar to abstracting test cases)
     parameters {
-         string(name: 'tomcat_dev', defaultValue: '3.88.65.49', description: 'Staging Server')
+         string(name: 'tomcat_dev', defaultValue: '3.87.36.181', description: 'Staging Server')
          //string(name: 'tomcat_prod', defaultValue: '54.144.41.225', description: 'Production Server')
     }
 
@@ -33,7 +33,7 @@ pipeline {
                     steps {
                         //TODO:  Update path to where .pem file is saved
                         //TODO:  If you are running Jenkins on a Windows machine and are not using tools such as Cmder, you will have to change "sh" to "bat" in this script
-                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat7/webapps"
+                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_dev}:\var\lib\tomcat7\webapps"
                     }
                 }
 
@@ -41,7 +41,7 @@ pipeline {
                     steps {
                         //TODO:  Update path to where .pem file is saved
                         //TODO:  If you are running Jenkins on a Windows machine and are not using tools such as Cmder, you will have to change "sh" to "bat" in this script
-                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat7/webapps"
+                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/*.war ec2-user@${params.tomcat_prod}:\varlib\tomcat7\webapps"
                     }
                 }
             }
