@@ -33,7 +33,7 @@ pipeline {
                     steps {
                         //TODO:  Update path to where .pem file is saved
                         //TODO:  If you are running Jenkins on a Windows machine and are not using tools such as Cmder, you will have to change "sh" to "bat" in this script
-                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_dev}:\var\lib\tomcat7\webapps"
+                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat7/webapps"
                     }
                 }
 
@@ -41,7 +41,7 @@ pipeline {
                     steps {
                         //TODO:  Update path to where .pem file is saved
                         //TODO:  If you are running Jenkins on a Windows machine and are not using tools such as Cmder, you will have to change "sh" to "bat" in this script
-                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/*.war ec2-user@${params.tomcat_prod}:\varlib\tomcat7\webapps"
+                        bat "scp -i C:\Users\ssingh\tomcatdemo.pem **/*.war ec2-user@${params.tomcat_prod}:/varlib/tomcat7/webapps"
                     }
                 }
             }
