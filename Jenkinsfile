@@ -43,7 +43,7 @@ pipeline {
                         //TODO:  If you are running Jenkins on a Windows machine and are not using tools such as Cmder, you will have to change "sh" to "bat" in this script
                         bat "scp -i C:/Users/ssingh/tomcat-demo.pem **/target/*.war ec2-user@${params.tomcat_prod}:/varlib/tomcat7/webapps"
                     }
-                    */
+                    
                 }
             }
         
