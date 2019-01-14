@@ -4,7 +4,7 @@ pipeline {
     //Public IP addresses set up for my 2 EC2 Instances (VMs) set up in AWS
     //Best Practice:  Use "parameters" instead of hard coding IP values within scripts (similar to abstracting test cases)
     parameters {
-         string(name: 'tomcat_dev', defaultValue: '3.87.36.181', description: 'Staging Server')
+         string(name: 'tomcat_dev', defaultValue: '172-31-91-182', description: 'Staging Server')
          //string(name: 'tomcat_prod', defaultValue: '54.144.41.225', description: 'Production Server')
     }
 
